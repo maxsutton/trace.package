@@ -277,7 +277,6 @@ code_tree <- function(trace_data, label = call) {
     }
   }
 
-
   list_data |>
     dplyr::group_by(.data$parent) |>
     dplyr::mutate(
@@ -289,7 +288,7 @@ code_tree <- function(trace_data, label = call) {
       ),
       tree = paste0(.data$trunks, .data$branch, .data$.user_label)
     ) |>
-    dplyr::pull(.data$tree) |>
+    dplyr::pull("tree") |>
     paste0(collapse = "\n") |>
     cat()
 
