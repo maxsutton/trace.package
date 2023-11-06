@@ -1,0 +1,18 @@
+Package: trace.package
+Title: Trace use of a package's functions
+Version: 0.0.0.9000
+Authors@R: 
+    person("Max", "Sutton", , "first.last@example.com", role = c("aut", "cre"))
+Description: This traces where a package's functions are used and how long each call to those functions takes.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Imports: 
+    crayon,
+    dplyr,
+    ggplot2,
+    microbenchmark,
+    rlang,
+    stringr,
+    utils
