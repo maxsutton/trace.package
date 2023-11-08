@@ -192,7 +192,7 @@ flame_graph <- function(trace_data) {
 #'
 #' @param text a vector of text
 #' @param group a vector of values to
-#' @param ...  a list of pairs: <value in group> = <colour>
+#' @param ...  a list of pairs: "group element" = "colour"
 #' @param .default the default colour for groups not specified
 #'
 #' @return a character vector same length as text

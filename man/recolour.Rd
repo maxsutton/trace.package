@@ -11,7 +11,7 @@ recolour(text, group, ..., .default = "black")
 
 \item{group}{a vector of values to}
 
-\item{...}{a list of pairs: \if{html}{\out{<value in group>}} = \if{html}{\out{<colour>}}}
+\item{...}{a list of pairs: "group element" = "colour"}
 
 \item{.default}{the default colour for groups not specified}
 }
