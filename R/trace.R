@@ -240,6 +240,11 @@ recolour <- function(text, group, ..., .default = "black") {
 #'
 #' code_tree(df, recolour(fun, pkg, ggplot2 = "red", scales = "blue"))
 code_tree <- function(trace_data, label = call) {
+
+  if (nrow(trace_data) == 0) {
+    return(invisible(NULL))
+  }
+
   df <- trace_data |>
     dplyr::mutate(.user_label = {{ label }})
 
@@ -254,6 +259,8 @@ code_tree <- function(trace_data, label = call) {
     } else {
       parent_stack <- parent_stack[-length(parent_stack)]
     }
+
+    if (length(parent_stack) == 0) parent_stack <- c(0)
   }
 
   list_data <- df |>
