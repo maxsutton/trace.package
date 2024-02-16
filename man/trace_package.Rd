@@ -21,13 +21,11 @@ functions are called, some diagnostic information is printed to the console.
 }
 \details{
 Packages must be loaded and attached to be traced: this function ensures
-this.
+this and provides warnings about packages that can't be loaded.
 }
 \note{
 This trace does not work with the base package
 }
 \examples{
-\dontrun{
-trace_package()
-}
+trace_package("ggplot2")
 }

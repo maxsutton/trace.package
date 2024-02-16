@@ -1,6 +1,6 @@
 Package: trace.package
 Title: Trace Use of a Package's Functions
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person("Max", "Sutton", , "maxwell.sutton@outlook.com", 
     role = c("aut", "cre"))

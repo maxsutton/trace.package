@@ -4,7 +4,7 @@
 #' functions are called, some diagnostic information is printed to the console.
 #'
 #' Packages must be loaded and attached to be traced: this function ensures
-#' this.
+#' this and provides warnings about packages that can't be loaded.
 #'
 #' @param pkg_name single package name
 #'
@@ -14,18 +14,21 @@
 #' @note This trace does not work with the base package
 #'
 #' @examples
-#' \dontrun{
-#' trace_package()
-#' }
+#' trace_package("ggplot2")
 trace_package <- function(pkg_name) {
   pkg_name <- check_packages(pkg_name)
   if (length(pkg_name) != 1) {
     stop("`pkg_nameq must be a single character vector", call. = FALSE)
   }
 
-  require(pkg_name, quietly = TRUE, character.only = TRUE)
-  pkg_env <- rlang::search_env(paste0("package:", pkg_name))
+  # Check if package is installed
+  rc <- require(pkg_name, quietly = TRUE, character.only = TRUE)
+  if (isFALSE(rc)) {
+    warning(paste0("Cannot find package '", pkg_name, "' so not traces created. Hint: Is it installed?"))
+    return(character())
+  }
 
+  pkg_env <- rlang::search_env(paste0("package:", pkg_name))
   pkg_fns <- utils::ls.str(envir = pkg_env, mode = "function")
 
   entry <- quote(cat(
@@ -88,7 +91,9 @@ check_packages <- function(packages) {
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' df <- run_trace(dplyr::if_else(TRUE, 1, 100), "rlang")
+#' }
 run_trace <- function(expr, packages) {
   packages <- check_packages(packages)
   cat("Tracing packages...\n")
@@ -222,23 +227,26 @@ recolour <- function(text, group, ..., .default = "black") {
   df$out
 }
 
-#' Print a tree of traced function calls
+#' Generate and print a tree of traced function calls
 #'
 #' @inheritParams flame_graph
+#' @inheritParams base::print.default
 #' @param label the label used at each node. By default, the `call` for each
 #'   function call traced.
 #'
-#' @return invisible(NULL)
+#' @return a character vector for each node of the tree
 #' @importFrom rlang .data
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' df <- run_trace(ggplot2::ggplot(), c("ggplot2", "scales"))
 #' code_tree(df)
 #'
 #' code_tree(df, fun)
 #'
 #' code_tree(df, recolour(fun, pkg, ggplot2 = "red", scales = "blue"))
+#' }
 code_tree <- function(trace_data, label = call) {
 
   if (nrow(trace_data) == 0) {
@@ -284,7 +292,7 @@ code_tree <- function(trace_data, label = call) {
     }
   }
 
-  list_data |>
+  output <- list_data |>
     dplyr::group_by(.data$parent) |>
     dplyr::mutate(
       branch = dplyr::case_when(
@@ -295,9 +303,14 @@ code_tree <- function(trace_data, label = call) {
       ),
       tree = paste0(.data$trunks, .data$branch, .data$.user_label)
     ) |>
-    dplyr::pull("tree") |>
-    paste0(collapse = "\n") |>
-    cat()
+    dplyr::pull("tree")
 
-  invisible(NULL)
+  class(output) <- append(class(output), "code_tree", after = 0L)
+  output
+}
+
+#' @describeIn code_tree pretty print the code tree
+#' @export
+print.code_tree <- function(x, ...) {
+  cat(x, sep = "\n")
 }

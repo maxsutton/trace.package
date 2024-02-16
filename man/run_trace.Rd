@@ -19,5 +19,7 @@ This evaluates an expression, and traces where functions from specified
 packages are used.
 }
 \examples{
+\dontrun{
 df <- run_trace(dplyr::if_else(TRUE, 1, 100), "rlang")
+}
 }

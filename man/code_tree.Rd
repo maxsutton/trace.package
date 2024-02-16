@@ -2,27 +2,42 @@
 % Please edit documentation in R/trace.R
 \name{code_tree}
 \alias{code_tree}
-\title{Print a tree of traced function calls}
+\alias{print.code_tree}
+\title{Generate and print a tree of traced function calls}
 \usage{
 code_tree(trace_data, label = call)
+
+\method{print}{code_tree}(x, ...)
 }
 \arguments{
 \item{trace_data}{a data.frame, output of run_trace()}
 
 \item{label}{the label used at each node. By default, the \code{call} for each
 function call traced.}
+
+\item{x}{the object to be printed.}
+
+\item{...}{further arguments to be passed to or from other
+    methods.  They are ignored in this function.}
 }
 \value{
-invisible(NULL)
+a character vector for each node of the tree
 }
 \description{
-Print a tree of traced function calls
+Generate and print a tree of traced function calls
 }
+\section{Methods (by generic)}{
+\itemize{
+\item \code{print(code_tree)}: pretty print the code tree
+
+}}
 \examples{
+\dontrun{
 df <- run_trace(ggplot2::ggplot(), c("ggplot2", "scales"))
 code_tree(df)
 
 code_tree(df, fun)
 
 code_tree(df, recolour(fun, pkg, ggplot2 = "red", scales = "blue"))
+}
 }
